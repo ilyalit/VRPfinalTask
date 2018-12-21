@@ -1,0 +1,237 @@
+<!--
+ - Created by Илья on 10.12.2018.
+ -->
+
+<apex:page id="InformationPage" controller="InformationPage" sidebar="false" showHeader="false">
+    <apex:slds />
+    <apex:form id="form">
+        <apex:pageMessages id="message" />
+        <div class="slds-grid slds-gutters" >
+            <div class="slds-col" style="text-align: right">
+                <label class="slds-form-element__label" for="text-input-search" >Search by Name:</label>
+            </div>
+            <div class="slds-col">
+                <apex:inputText id="text-input-search" styleClass="slds-input" value="{!searchByName}">
+                    <apex:actionSupport event="onchange" reRender="form"/>
+                </apex:inputText>
+            </div>
+            <div class="slds-col">
+                <apex:commandButton value="Add record" action="{!showPopup}" rerender="tstpopup" styleClass="slds-button slds-button_brand"/>
+            </div>
+        </div>
+
+    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+        <thead>
+        <tr class="slds-line-height_reset">
+            <th class="slds-text-title_caps" scope="col">
+                <div class="slds-truncate" title="Opportunity Name">Product Name
+                        <apex:commandLink value="⇅" reRender="form">
+                            <apex:param name="sortField" value="Name" assignTo="{!sortField}"/>
+                            <apex:param name="myOrder" value="{!IF(myOrder == 'ASC', 'DESC','ASC')}" assignTo="{!myOrder}" />
+                        </apex:commandLink>
+                </div>
+            </th>
+            <th class="slds-text-title_caps" scope="col">
+                <div class="slds-truncate" title="Account Name">Type
+                    <apex:commandLink value="⇅" reRender="form">
+                        <apex:param name="sortField" value="Type__c" assignTo="{!sortField}"/>
+                        <apex:param name="myOrder" value="{!IF(myOrder == 'ASC', 'DESC','ASC')}" assignTo="{!myOrder}" />
+                    </apex:commandLink>
+                </div>
+            </th>
+            <th class="slds-text-title_caps" scope="col">
+                <div class="slds-truncate" title="Close Date">Add Date
+                    <apex:commandLink value="⇅" reRender="form">
+                    <apex:param name="sortField" value="Add_Date__c" assignTo="{!sortField}"/>
+                    <apex:param name="myOrder" value="{!IF(myOrder == 'ASC', 'DESC','ASC')}" assignTo="{!myOrder}" />
+                    </apex:commandLink>
+                </div>
+            </th>
+            <th class="slds-text-title_caps" scope="col">
+                <div class="slds-truncate" title="Stage">Date of issue
+                    <apex:commandLink value="⇅" reRender="form">
+                        <apex:param name="sortField" value="Date_of_issue__c" assignTo="{!sortField}"/>
+                        <apex:param name="myOrder" value="{!IF(myOrder == 'ASC', 'DESC','ASC')}" assignTo="{!myOrder}" />
+                    </apex:commandLink>
+                </div>
+            </th>
+            <th class="slds-text-title_caps" scope="col">
+                <div class="slds-truncate" title="Confidence"> Available amount
+                    <apex:commandLink value="⇅" reRender="form">
+                        <apex:param name="sortField" value="Amount__c" assignTo="{!sortField}"/>
+                        <apex:param name="myOrder" value="{!IF(myOrder == 'ASC', 'DESC','ASC')}" assignTo="{!myOrder}" />
+                    </apex:commandLink>
+                </div>
+            </th>
+            <th class="slds-text-title_caps" scope="col">
+                <div class="slds-truncate" title="Amount">Unit Price
+                    <apex:commandLink value="⇅" reRender="form">
+                        <apex:param name="sortField" value="Price__c" assignTo="{!sortField}"/>
+                        <apex:param name="myOrder" value="{!IF(myOrder == 'ASC', 'DESC','ASC')}" assignTo="{!myOrder}" />
+                    </apex:commandLink>
+                </div>
+            </th>
+            <th class="slds-text-title_caps" scope="col">
+                <div class="slds-truncate" title="Contact">In stock
+                    <apex:commandLink value="⇅" reRender="form">
+                        <apex:param name="sortField" value="In_stock__c" assignTo="{!sortField}"/>
+                        <apex:param name="myOrder" value="{!IF(myOrder == 'ASC', 'DESC','ASC')}" assignTo="{!myOrder}" />
+                    </apex:commandLink>
+                </div>
+            </th>
+            <th class="slds-text-title_caps" scope="col">
+                <div class="slds-truncate" title="Contact"></div>
+            </th>
+            <th class="slds-text-title_caps" scope="col">
+                <div class="slds-truncate" title="Contact"></div>
+            </th>
+        </tr>
+        </thead>
+        <apex:repeat value="{!Products}" var="prod">
+        <tbody>
+        <tr class="slds-hint-parent">
+            <th data-label="Opportunity Name" scope="row">
+                <div class="slds-truncate" title="Cloudhub">
+                    <apex:outputField value="{!prod.Name}"/>
+                </div>
+            </th>
+            <td data-label="Account Name">
+                <div class="slds-truncate" title="Cloudhub">
+                    <apex:outputField value="{!prod.Type__c}"/>
+                </div>
+            </td>
+            <td data-label="Close Date">
+                <div class="slds-truncate" title="4/14/2015">
+                    <apex:outputField value="{!prod.Add_Date__c}"/>
+                </div>
+            </td>
+            <td data-label="Prospecting">
+                <div class="slds-truncate" title="Prospecting">
+                    <apex:outputField value="{!prod.Date_of_issue__c}"/>
+                </div>
+            </td>
+            <td data-label="Confidence">
+                <div class="slds-truncate" title="20%">
+                    <apex:outputField value="{!prod.Amount__c}"/>
+                </div>
+            </td>
+            <td data-label="Amount">
+                <div class="slds-truncate" title="$25k">
+                    <apex:outputField value="{!prod.Price__c}"/>
+                </div>
+            </td>
+            <td data-label="Contact">
+                <div class="slds-truncate" title="jrogers@cloudhub.com">
+                    <apex:outputField value="{!prod.In_stock__c}"/>
+                </div>
+            </td>
+            <td data-label="Contact">
+                <div class="slds-truncate" title="jrogers@cloudhub.com">
+                    <apex:commandButton action="{!deleteRecord}" value="Delete" reRender="form" styleClass="slds-button slds-button_brand">
+                        <apex:param name="retriveId" assignTo="{!retriveId.Id}" value="{!prod.Id}"/>
+                    </apex:commandButton>
+                </div>
+            </td>
+            <td data-label="Contact">
+                <div class="slds-truncate" title="jrogers@cloudhub.com">
+                    <apex:commandButton value="Edit" action="{!showPopup}" rerender="tstpopup" styleClass="slds-button slds-button_neutral">
+                        <apex:param name="retriveId" assignTo="{!existRecord.Id}" value="{!prod.Id}"/>
+                    </apex:commandButton>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+        </apex:repeat>
+    </table>
+<!------------------------------------------POPUP-------------------------------------------------------------------->
+        <apex:outputPanel id="tstpopup">
+            <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!popUpStatus}"/>
+            <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!popUpStatus}">
+                <div class="slds-col">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="text-input-id-1">Product Name:</label>
+                        <div class="slds-form-element__control">
+                            <apex:inputField id="text-input-id-1" styleClass="slds-input" value="{!existRecord.Name}"/>
+                        </div>
+                    </div>
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="text-input-id-2">Type:</label>
+                        <div class="slds-form-element__control">
+                            <apex:inputField id="text-input-id-2" styleClass="slds-input" value="{!existRecord.Type__c}" />
+                        </div>
+                    </div>
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="text-input-id-3">Add Date:</label>
+                        <div class="slds-form-element__context-input-id-2trol">
+                            <apex:inputField id="text-input-id-3" styleClass="slds-input" value="{!existRecord.Add_Date__c}"/>
+                        </div>
+                    </div>
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="text-input-id-4">DATE OF ISSUE:</label>
+                        <div class="slds-form-element__control">
+                            <apex:inputField id="text-input-id-4" styleClass="slds-input" value="{!existRecord.Date_of_issue__c}" />
+                        </div>
+                    </div>
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="text-input-id-5">Available Amount:</label>
+                        <div class="slds-form-element__control">
+                            <apex:inputField id="text-input-id-5" styleClass="slds-input" value="{!existRecord.Amount__c}" />
+                        </div>
+                    </div>
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="text-input-id-6">Unit Price:</label>
+                        <div class="slds-form-element__control">
+                            <apex:inputField id="text-input-id-6" styleClass="slds-input" value="{!existRecord.Price__c}" />
+                        </div>
+                    </div>
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="text-input-id-7">In Stock:</label>
+                        <div class="slds-form-element__control">
+                            <apex:inputField id="text-input-id-7" styleClass="slds-input" value="{!existRecord.In_stock__c}" />
+                        </div>
+                    </div>
+                </div>
+                <apex:commandButton value="Cancel" action="{!closePopup}" rerender="tstpopup" styleClass="slds-button slds-button_neutral"/>
+                <apex:commandButton value="Save" action="{!savePopUp}" reRender="form" styleClass="slds-button slds-button_brand">
+                </apex:commandButton>
+            </apex:outputPanel>
+        </apex:outputPanel>
+
+
+        <style type="text/css">
+            .custPopup{
+                background-color: white;
+                border-width: 2px;
+                border-style: solid;
+                z-index: 2;
+                left: 50%;
+                padding:10px;
+                position: absolute;
+                width: 500px;
+                margin-left: -250px;
+                top:100px;
+            }
+            .popupBackground{
+                background-color:black;
+                opacity: 0.20;
+                filter: alpha(opacity = 20);
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                z-index: 1;
+            }
+
+        </style>
+            <div style="height: 180px;">
+                <div class="slds-docked-form-footer" id="myButtons">
+            <apex:commandButton action="{!Beginning}" title="Beginning" value="<<" disabled="{!disablePrevious}" reRender="form,myButtons" styleClass="slds-button slds-button_neutral"/>
+            <apex:commandButton action="{!Previous}" title="Previous" value="<" disabled="{!disablePrevious}" reRender="form,myButtons" styleClass="slds-button slds-button_neutral"/>
+            <apex:outputText value=" Page # {!pageNumber} of {!totalPages} " styleClass="slds-form-element__label"/>
+            <apex:commandButton action="{!Next}" title="Next" value=">" disabled="{!disableNext}" reRender="form,myButtons" styleClass="slds-button slds-button_neutral"/>
+            <apex:commandButton action="{!End}" title="End" value=">>" disabled="{!disableNext}" reRender="form,myButtons" styleClass="slds-button slds-button_neutral"/>
+        </div>
+    </div>
+    </apex:form>
+</apex:page>
