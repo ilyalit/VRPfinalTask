@@ -8,13 +8,35 @@
         <apex:pageMessages id="message" />
         <div class="slds-grid slds-gutters" >
             <div class="slds-col" style="text-align: right">
-                <label class="slds-form-element__label" for="text-input-search" >Search by Name:</label>
-            </div>
+            <label class="slds-form-element__label" for="text-input-search" >Search by Name:</label>
+        </div>
             <div class="slds-col">
                 <apex:inputText id="text-input-search" styleClass="slds-input" value="{!searchByName}">
                     <apex:actionSupport event="onchange" reRender="form"/>
                 </apex:inputText>
             </div>
+
+
+            <div class="slds-col" style="text-align: right">
+                <label class="slds-form-element__label" for="text-input-search-by-date1" >Search by Added date:</label>
+            </div>
+            <div class="slds-col">
+                <apex:inputField id="text-input-search-by-date1" styleClass="slds-input" value="{!searchBy.Add_Date__c}">
+                    <apex:actionSupport event="onchange" reRender="form"/>
+                </apex:inputField>
+            </div>
+
+            <!--<div class="slds-col" style="text-align: right">-->
+                <!--<label class="slds-form-element__label" for="text-input-search-by-date2" >to</label>-->
+            <!--</div>-->
+            <!--<div class="slds-col">-->
+                <!--<apex:inputField id="text-input-search-by-date2" styleClass="slds-input" value="{searchBy2.Add_Date__c}">-->
+                    <!--<apex:actionSupport event="onchange" reRender="form"/>-->
+                <!--</apex:inputField>-->
+            <!--</div>-->
+
+
+
             <div class="slds-col">
                 <apex:commandButton value="Add record" action="{!showPopup}" rerender="tstpopup" styleClass="slds-button slds-button_brand"/>
             </div>
@@ -24,56 +46,56 @@
         <thead>
         <tr class="slds-line-height_reset">
             <th class="slds-text-title_caps" scope="col">
-                <div class="slds-truncate" title="Opportunity Name">Product Name
-                        <apex:commandLink value="⇅" reRender="form">
+                <div class="slds-truncate" title="Opportunity Name">
+                        <apex:commandLink value="Product Name {!IF(sortField=='Name',IF(myOrder='ASC','▼','▲'),'')}" reRender="form">
                             <apex:param name="sortField" value="Name" assignTo="{!sortField}"/>
                             <apex:param name="myOrder" value="{!IF(myOrder == 'ASC', 'DESC','ASC')}" assignTo="{!myOrder}" />
                         </apex:commandLink>
                 </div>
             </th>
             <th class="slds-text-title_caps" scope="col">
-                <div class="slds-truncate" title="Account Name">Type
-                    <apex:commandLink value="⇅" reRender="form">
+                <div class="slds-truncate" title="Account Name">
+                    <apex:commandLink value="Type {!IF(sortField=='Type__c',IF(myOrder='ASC','▼','▲'),'')}" reRender="form">
                         <apex:param name="sortField" value="Type__c" assignTo="{!sortField}"/>
                         <apex:param name="myOrder" value="{!IF(myOrder == 'ASC', 'DESC','ASC')}" assignTo="{!myOrder}" />
                     </apex:commandLink>
                 </div>
             </th>
             <th class="slds-text-title_caps" scope="col">
-                <div class="slds-truncate" title="Close Date">Add Date
-                    <apex:commandLink value="⇅" reRender="form">
+                <div class="slds-truncate" title="Close Date">
+                    <apex:commandLink value="Add Date {!IF(sortField=='Add_Date__c',IF(myOrder='ASC','▼','▲'),'')}" reRender="form">
                     <apex:param name="sortField" value="Add_Date__c" assignTo="{!sortField}"/>
                     <apex:param name="myOrder" value="{!IF(myOrder == 'ASC', 'DESC','ASC')}" assignTo="{!myOrder}" />
                     </apex:commandLink>
                 </div>
             </th>
             <th class="slds-text-title_caps" scope="col">
-                <div class="slds-truncate" title="Stage">Date of issue
-                    <apex:commandLink value="⇅" reRender="form">
+                <div class="slds-truncate" title="Stage">
+                    <apex:commandLink value="Date of issue {!IF(sortField=='Date_of_issue__c',IF(myOrder='ASC','▼','▲'),'')}" reRender="form">
                         <apex:param name="sortField" value="Date_of_issue__c" assignTo="{!sortField}"/>
                         <apex:param name="myOrder" value="{!IF(myOrder == 'ASC', 'DESC','ASC')}" assignTo="{!myOrder}" />
                     </apex:commandLink>
                 </div>
             </th>
             <th class="slds-text-title_caps" scope="col">
-                <div class="slds-truncate" title="Confidence"> Available amount
-                    <apex:commandLink value="⇅" reRender="form">
+                <div class="slds-truncate" title="Confidence">
+                    <apex:commandLink value="Available amount {!IF(sortField=='Amount__c',IF(myOrder='ASC','▼','▲'),'')}" reRender="form">
                         <apex:param name="sortField" value="Amount__c" assignTo="{!sortField}"/>
                         <apex:param name="myOrder" value="{!IF(myOrder == 'ASC', 'DESC','ASC')}" assignTo="{!myOrder}" />
                     </apex:commandLink>
                 </div>
             </th>
             <th class="slds-text-title_caps" scope="col">
-                <div class="slds-truncate" title="Amount">Unit Price
-                    <apex:commandLink value="⇅" reRender="form">
+                <div class="slds-truncate" title="Amount">
+                    <apex:commandLink value="Unit Price {!IF(sortField=='Price__c',IF(myOrder='ASC','▼','▲'),'')}" reRender="form">
                         <apex:param name="sortField" value="Price__c" assignTo="{!sortField}"/>
                         <apex:param name="myOrder" value="{!IF(myOrder == 'ASC', 'DESC','ASC')}" assignTo="{!myOrder}" />
                     </apex:commandLink>
                 </div>
             </th>
             <th class="slds-text-title_caps" scope="col">
-                <div class="slds-truncate" title="Contact">In stock
-                    <apex:commandLink value="⇅" reRender="form">
+                <div class="slds-truncate" title="Contact">
+                    <apex:commandLink value="In stock {!IF(sortField=='In_stock__c',IF(myOrder='ASC','▼','▲'),'')}" reRender="form">
                         <apex:param name="sortField" value="In_stock__c" assignTo="{!sortField}"/>
                         <apex:param name="myOrder" value="{!IF(myOrder == 'ASC', 'DESC','ASC')}" assignTo="{!myOrder}" />
                     </apex:commandLink>
@@ -184,12 +206,6 @@
                             <apex:inputField id="text-input-id-6" styleClass="slds-input" value="{!existRecord.Price__c}" />
                         </div>
                     </div>
-                    <div class="slds-form-element">
-                        <label class="slds-form-element__label" for="text-input-id-7">In Stock:</label>
-                        <div class="slds-form-element__control">
-                            <apex:inputField id="text-input-id-7" styleClass="slds-input" value="{!existRecord.In_stock__c}" />
-                        </div>
-                    </div>
                 </div>
                 <apex:commandButton value="Cancel" action="{!closePopup}" rerender="tstpopup" styleClass="slds-button slds-button_neutral"/>
                 <apex:commandButton value="Save" action="{!savePopUp}" reRender="form" styleClass="slds-button slds-button_brand">
@@ -199,6 +215,10 @@
 
 
         <style type="text/css">
+            .dateFormat{
+                visibility:hidden;
+            }
+
             .custPopup{
                 background-color: white;
                 border-width: 2px;

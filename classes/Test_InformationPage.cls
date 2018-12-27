@@ -72,7 +72,13 @@ private class Test_InformationPage {
         List<Stock__c> allProducts = a.getProducts();
         System.assertEquals(10, allProducts.size());
     }
-    @isTest public static void getProductsWithSearch_Test(){
+    @isTest public static void getProductsWithSearchName_Test(){
+        InformationPage a = new InformationPage();
+        a.searchBy.Add_Date__c = Date.today().addDays(15);
+        List<Stock__c> allProducts = a.getProducts();
+        System.assertEquals(0, allProducts.size());
+    }
+    @isTest public static void getProductsWithSearchDate_Test(){
         InformationPage a = new InformationPage();
         a.searchByName = 'error';
         List<Stock__c> allProducts = a.getProducts();
@@ -102,7 +108,7 @@ private class Test_InformationPage {
 
         result = a.End();
         System.assertEquals(null, result);
-        System.assertEquals(0, a.counter);
+        System.assertEquals(-13, a.counter);
 
         Boolean resultsBool = a.getDisablePrevious();
         System.assertEquals(true, resultsBool);
@@ -114,7 +120,7 @@ private class Test_InformationPage {
         System.assertEquals(0, resultsInt);
 
         resultsInt = a.getPageNumber();
-        System.assertEquals(1, resultsInt);
+        System.assertEquals(0, resultsInt);
 
         resultsInt = a.getTotalPages();
         System.assertEquals(0, resultsInt);

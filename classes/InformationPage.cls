@@ -8,14 +8,14 @@ public with sharing class InformationPage {
     public Boolean popUpStatus{get;set;}
     public Stock__c existRecord {get;set;}
     //---------PAGINATION VARIABLES---------
-    public integer counter=0;  //keeps track of the offset
-    private integer list_size=13; //sets the page size or number of rows
-    public integer total_size=0; //used to show user the total size of the list
+    public Integer counter=0;  //keeps track of the offset
+    private Integer list_size=13; //sets the page size or number of rows
+    public Integer total_size=0; //used to show user the total size of the list
     //-------------SORT VARIABLES-------------
     public String sortField {get;set;}
     public String myOrder {get;set;}
-
     public String searchByName{get;set;}
+    public Stock__c searchBy {get;set;}
 
     public InformationPage(){
         newRecord = new Stock__c();
@@ -24,10 +24,15 @@ public with sharing class InformationPage {
         sortField = 'Name';
         myOrder = 'ASC';
         searchByName = '';
+        searchBy = new Stock__c();
     }
     public void deleteRecord(){
         try{
+            List<Stock__c> remainder = getProducts();
             delete retriveId;
+            if(remainder.size()<2){
+                Previous();
+            }
             ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.CONFIRM,'Record Deleted!');
             ApexPages.addMessage(myMsg);
         }catch (DmlException e){
@@ -83,13 +88,19 @@ public with sharing class InformationPage {
     //------------------------------------------------------------------------------------------------------------
     public List<Stock__c> getProducts() {
         try {
-            String q = 'Select Id, Name, Add_Date__c, Amount__c, Date_of_issue__c, In_stock__c, Price__c, Type__c From Stock__c ';
+            String q = 'SELECT Id, Name, Add_Date__c, Amount__c, Date_of_issue__c, In_stock__c, Price__c, Type__c From Stock__c ';
+            if(searchBy.Add_Date__c != null){
+                Date inputDate = searchBy.Add_Date__c;
+                List<Stock__c> foundByAddedDate = Database.query(q += ' WHERE Add_Date__c =:inputDate ORDER BY ' +  String.escapeSingleQuotes(sortField) + ' ' + myOrder + ' LIMIT ' + list_size + ' OFFSET ' + counter);
+                total_size = database.countQuery('SELECT count() FROM Stock__c ' + ' Where Add_Date__c =:inputDate');
+                return foundByAddedDate;
+            }
             if(searchByName == ''){
-                System.debug('searchByName in not empty');
-                q += ' Order by ' +  String.escapeSingleQuotes(sortField) + ' ' + myOrder + ' LIMIT ' + list_size + ' OFFSET ' + counter;
+                System.debug('searchByName is not empty');
+                q += ' Order by ' +  String.escapeSingleQuotes(sortField) + ' ' + myOrder + ' NULLS LAST' + ' LIMIT ' + list_size + ' OFFSET ' + counter;
                 total_size = [select count() from Stock__c];
             } else{
-                q += ' WHERE Name LIKE \'%' + String.escapeSingleQuotes(searchByName)+'%\'' + ' Order by ' +  String.escapeSingleQuotes(sortField) + ' ' + myOrder + ' LIMIT ' + list_size + ' OFFSET ' + counter;
+                q += ' WHERE Name LIKE \'%' + String.escapeSingleQuotes(searchByName)+'%\'' + ' Order by ' +  String.escapeSingleQuotes(sortField) + ' ' + myOrder + ' NULLS LAST' + ' LIMIT ' + list_size + ' OFFSET ' + counter;
                 total_size = database.countQuery('SELECT count() FROM Stock__c ' + 'WHERE Name LIKE \'%' + String.escapeSingleQuotes(searchByName)+'%\'');
             }
             return Database.query(q);
@@ -113,6 +124,9 @@ public with sharing class InformationPage {
     }
     public PageReference End() { //user clicked end
         counter = total_size - math.mod(total_size, list_size);
+        if(counter == total_size){
+            Previous();
+        }
         return null;
     }
     public Boolean getDisablePrevious() {
